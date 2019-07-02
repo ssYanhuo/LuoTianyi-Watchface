@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Luo Tianyi Concept</string>
+    <string name="message">Watch face tapped</string>
+    <string name="my_analog_name">Luo Tianyi Concept</string>
+    <string name="title_activity_config">ConfigActivity</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">A watchface based on Vsinger official watch.\n@ssYanhuo</string>
+</resources>

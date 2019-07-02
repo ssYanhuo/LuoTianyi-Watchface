@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">洛天依概念</string>
+    <string name="message">点击了表盘</string>
+    <string name="my_analog_name">洛天依概念</string>
+    <string name="hello_world">灵感来自于洛天依官方概念手表。\n@三生烟火</string>
+    <string name="title_activity_config">关于\\配置</string>
+</resources>
