@@ -13,6 +13,7 @@ import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -22,13 +23,17 @@ import androidx.palette.graphics.Palette;
 import android.support.wearable.watchface.CanvasWatchFaceService;
 import android.support.wearable.watchface.WatchFaceService;
 import android.support.wearable.watchface.WatchFaceStyle;
+import android.view.Gravity;
 import android.view.SurfaceHolder;
 import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
+import java.nio.channels.GatheringByteChannel;
 import java.util.Calendar;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
+
+import static android.support.wearable.watchface.WatchFaceStyle.PROTECT_STATUS_BAR;
 
 /**
  * Analog watch face with a ticking second hand. In ambient mode, the second hand isn't
@@ -112,9 +117,12 @@ public class MyWatchFace extends CanvasWatchFaceService {
         private int mWatchHandShadowColor;
         private Paint mHourPaint;
         private Paint mMinutePaint;
-        private Paint mTickAndCirclePaint;
+        private Paint mHourTickPaint;
+        private Paint mMinuteTickPaint;
         private Paint mBackgroundPaint;
         private Paint mCirclePaint;
+        private Paint mTianyiPaint;
+        private Paint mHourNumberPaint;
         private Bitmap mBackgroundBitmap;
         private Bitmap mGrayBackgroundBitmap;
         private Bitmap mHourBitmap;
@@ -127,6 +135,7 @@ public class MyWatchFace extends CanvasWatchFaceService {
             super.onCreate(holder);
 
             setWatchFaceStyle(new WatchFaceStyle.Builder(MyWatchFace.this)
+                    .setStatusBarGravity(Gravity.CENTER)
                     .setAcceptsTapEvents(true)
                     .build());
 
@@ -176,19 +185,45 @@ public class MyWatchFace extends CanvasWatchFaceService {
             mMinutePaint.setShadowLayer(SHADOW_RADIUS, 0, 0, mWatchHandShadowColor);
             mMinutePaint.setStyle(Paint.Style.FILL_AND_STROKE);
 
-            mTickAndCirclePaint = new Paint();
-            mTickAndCirclePaint.setColor(mWatchHandColor);
-            mTickAndCirclePaint.setStrokeWidth(SECOND_TICK_STROKE_WIDTH);
-            mTickAndCirclePaint.setAntiAlias(true);
-            mTickAndCirclePaint.setStrokeCap(Paint.Cap.ROUND);
-            mTickAndCirclePaint.setShadowLayer(SHADOW_RADIUS, 0, 0, mWatchHandShadowColor);
-            mTickAndCirclePaint.setStyle(Paint.Style.STROKE);
+            mHourTickPaint = new Paint();
+            mHourTickPaint.setColor(mWatchHandColor);
+            mHourTickPaint.setStrokeWidth(SECOND_TICK_STROKE_WIDTH);
+            mHourTickPaint.setAntiAlias(true);
+            mHourTickPaint.setStrokeCap(Paint.Cap.ROUND);
+            mHourTickPaint.setShadowLayer(SHADOW_RADIUS, 0, 0, mWatchHandShadowColor);
+            mHourTickPaint.setStyle(Paint.Style.STROKE);
+
+            mMinuteTickPaint = new Paint();
+            mMinuteTickPaint.setColor(mWatchHandColor);
+            mMinuteTickPaint.setStrokeWidth(SECOND_TICK_STROKE_WIDTH);
+            mMinuteTickPaint.setAntiAlias(true);
+            mMinuteTickPaint.setStrokeCap(Paint.Cap.ROUND);
+            mMinuteTickPaint.setShadowLayer(SHADOW_RADIUS, 0, 0, mWatchHandShadowColor);
+            mMinuteTickPaint.setStyle(Paint.Style.STROKE);
 
             mCirclePaint = new Paint();
             mCirclePaint.setColor(TIANYI_BLUE);
             mCirclePaint.setStrokeWidth(SECOND_TICK_STROKE_WIDTH);
             mCirclePaint.setAntiAlias(true);
             mCirclePaint.setStyle(Paint.Style.FILL);
+
+            mTianyiPaint = new Paint();
+            mTianyiPaint.setColor(TIANYI_BLUE);
+            mTianyiPaint.setTextAlign(Paint.Align.CENTER);
+            mTianyiPaint.setTypeface(Typeface.createFromAsset(getAssets(), "font/simhei.ttf"));
+            mTianyiPaint.setFakeBoldText(true);
+            mTianyiPaint.setTextSize(56);
+            mTianyiPaint.setAntiAlias(true);
+
+            mHourNumberPaint = new Paint();
+            mHourNumberPaint.setColor(Color.WHITE);
+            mHourNumberPaint.setTextAlign(Paint.Align.CENTER);
+            mHourNumberPaint.setTypeface(Typeface.createFromAsset(getAssets(), "font/simhei.ttf"));
+            mHourNumberPaint.setFakeBoldText(true);
+            mHourNumberPaint.setTextSize(36);
+            mHourNumberPaint.setAntiAlias(true);
+            mHourNumberPaint.setStyle(Paint.Style.STROKE);
+            mHourNumberPaint.setStrokeWidth(SECOND_TICK_STROKE_WIDTH);
         }
 
         @Override
@@ -225,29 +260,35 @@ public class MyWatchFace extends CanvasWatchFaceService {
             if (mAmbient) {
                 mHourPaint.setColor(Color.WHITE);
                 mMinutePaint.setColor(TIANYI_BLUE);
-                mTickAndCirclePaint.setColor(Color.WHITE);
+                mHourTickPaint.setColor(Color.WHITE);
 
                 mHourPaint.setAntiAlias(false);
-                mMinutePaint.setAntiAlias(false);
-                mTickAndCirclePaint.setAntiAlias(false);
+                mHourTickPaint.setAntiAlias(false);
+                mHourNumberPaint.setAntiAlias(false);
 
                 mHourPaint.clearShadowLayer();
                 mMinutePaint.clearShadowLayer();
-                mTickAndCirclePaint.clearShadowLayer();
+                mHourTickPaint.clearShadowLayer();
 
+                mTianyiPaint.setAlpha(255);
+                mMinuteTickPaint.setAlpha(0);
+                mHourNumberPaint.setAlpha(255);
             } else {
                 mHourPaint.setColor(mWatchHandColor);
                 mMinutePaint.setColor(TIANYI_BLUE);
-                mTickAndCirclePaint.setColor(mWatchHandColor);
+                mHourTickPaint.setColor(mWatchHandColor);
 
                 mHourPaint.setAntiAlias(true);
-                mMinutePaint.setAntiAlias(true);
-                mTickAndCirclePaint.setAntiAlias(true);
+                mHourTickPaint.setAntiAlias(true);
+                mHourNumberPaint.setAntiAlias(true);
 
                 mHourPaint.setShadowLayer(SHADOW_RADIUS, 0, 0, mWatchHandShadowColor);
                 mMinutePaint.setShadowLayer(SHADOW_RADIUS, 0, 0, mWatchHandShadowColor);
-                mTickAndCirclePaint.setShadowLayer(SHADOW_RADIUS, 0, 0, mWatchHandShadowColor);
+                mHourTickPaint.setShadowLayer(SHADOW_RADIUS, 0, 0, mWatchHandShadowColor);
 
+                mTianyiPaint.setAlpha(0);
+                mMinuteTickPaint.setAlpha(255);
+                mHourNumberPaint.setAlpha(0);
             }
         }
 
@@ -336,9 +377,6 @@ public class MyWatchFace extends CanvasWatchFaceService {
                 case TAP_TYPE_TAP:
                     // The user has completed the tap gesture.
                     // TODO: Add code to handle the tap gesture.
-                    Toast.makeText(getApplicationContext(), R.string.message, Toast.LENGTH_SHORT)
-                            .show();
-                    break;
             }
             invalidate();
         }
@@ -349,8 +387,9 @@ public class MyWatchFace extends CanvasWatchFaceService {
             mCalendar.setTimeInMillis(now);
             drawHourWatchHand(canvas);
             drawBackground(canvas);
+            drawHourNumber(canvas);
             drawWatchFace(canvas);
-
+            drawTianyiLogo(canvas);
         }
         private void drawHourWatchHand(Canvas canvas){
             final float hourHandOffset = mCalendar.get(Calendar.MINUTE) / 2f;
@@ -376,6 +415,11 @@ public class MyWatchFace extends CanvasWatchFaceService {
             }
         }
 
+        private void drawHourNumber(Canvas canvas){
+            canvas.drawText(String.valueOf( mCalendar.get(Calendar.HOUR)), mCenterX,mCenterX + 96, mHourNumberPaint);
+            canvas.drawCircle(mCenterX, mCenterX + 82, 24, mHourNumberPaint);
+        }
+
         private void drawWatchFace(Canvas canvas) {
 
             /*
@@ -385,24 +429,26 @@ public class MyWatchFace extends CanvasWatchFaceService {
              */
             float innerTickRadius = mCenterX - 22;
             float outerTickRadius = mCenterX - 4;
+            for (int tickIndex = 0; tickIndex < 12; tickIndex++) {
+                if(tickIndex == 0){continue;}
+                float tickRot = (float) (tickIndex * Math.PI * 2 / 12);
+                float innerX = (float) Math.sin(tickRot) * innerTickRadius;
+                float innerY = (float) -Math.cos(tickRot) * innerTickRadius;
+                float outerX = (float) Math.sin(tickRot) * outerTickRadius;
+                float outerY = (float) -Math.cos(tickRot) * outerTickRadius;
+                canvas.drawLine(mCenterX + innerX, mCenterY + innerY,
+                        mCenterX + outerX, mCenterY + outerY, mHourTickPaint);
+            }
             for (int tickIndex = 0; tickIndex < 60; tickIndex++) {
+                if(tickIndex % 5 == 0){continue;}
                 if(tickIndex == 59 || tickIndex == 0 || tickIndex == 1){continue;}
                 float tickRot = (float) (tickIndex * Math.PI * 2 / 60);
-                if(tickIndex % 5 == 0){
-                    float innerX = (float) Math.sin(tickRot) * innerTickRadius;
-                    float innerY = (float) -Math.cos(tickRot) * innerTickRadius;
-                    float outerX = (float) Math.sin(tickRot) * outerTickRadius;
-                    float outerY = (float) -Math.cos(tickRot) * outerTickRadius;
-                    canvas.drawLine(mCenterX + innerX, mCenterY + innerY,
-                            mCenterX + outerX, mCenterY + outerY, mTickAndCirclePaint);
-                }else{
-                    float innerX = (float) Math.sin(tickRot) * (innerTickRadius + 6);
-                    float innerY = (float) -Math.cos(tickRot) * (innerTickRadius + 6);
-                    float outerX = (float) Math.sin(tickRot) * outerTickRadius;
-                    float outerY = (float) -Math.cos(tickRot) * outerTickRadius;
-                    canvas.drawLine(mCenterX + innerX, mCenterY + innerY,
-                            mCenterX + outerX, mCenterY + outerY, mTickAndCirclePaint);
-                }
+                float innerX = (float) Math.sin(tickRot) * (innerTickRadius + 6);
+                float innerY = (float) -Math.cos(tickRot) * (innerTickRadius + 6);
+                float outerX = (float) Math.sin(tickRot) * outerTickRadius;
+                float outerY = (float) -Math.cos(tickRot) * outerTickRadius;
+                canvas.drawLine(mCenterX + innerX, mCenterY + innerY,
+                                mCenterX + outerX, mCenterY + outerY, mMinuteTickPaint);
             }
 
             /*
@@ -413,7 +459,6 @@ public class MyWatchFace extends CanvasWatchFaceService {
             final float minutesRotation = mCalendar.get(Calendar.MINUTE) * 6f;
 
             final float hourHandOffset = mCalendar.get(Calendar.MINUTE) / 2f;
-            final float hoursRotation = (mCalendar.get(Calendar.HOUR) * 30) + hourHandOffset;
 
             /*
              * Save the canvas state before we can begin to rotate it.
@@ -439,6 +484,11 @@ public class MyWatchFace extends CanvasWatchFaceService {
             canvas.restore();
             canvas.drawCircle(mCenterX, mCenterY, CENTER_GAP_AND_CIRCLE_RADIUS, mCirclePaint);
         }
+
+        public void drawTianyiLogo(Canvas canvas){
+            canvas.drawText("∞", mCenterX, mCenterY - 120, mTianyiPaint);
+        }
+
 
         @Override
         public void onVisibilityChanged(boolean visible) {
