@@ -7,8 +7,8 @@ android {
         applicationId "com.ssyanhuo.yanhuowatchface"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        versionCode 1.01
+        versionName "1.01-Summer"
         multiDexEnabled true
     }
     buildTypes {

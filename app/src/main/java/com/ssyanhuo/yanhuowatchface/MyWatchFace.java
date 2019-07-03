@@ -416,7 +416,9 @@ public class MyWatchFace extends CanvasWatchFaceService {
         }
 
         private void drawHourNumber(Canvas canvas){
-            canvas.drawText(String.valueOf( mCalendar.get(Calendar.HOUR)), mCenterX,mCenterX + 96, mHourNumberPaint);
+            int mHour = mCalendar.get(Calendar.HOUR);
+            if (mHour == 0){mHour = 12;}
+            canvas.drawText(String.valueOf(mHour), mCenterX,mCenterX + 96, mHourNumberPaint);
             canvas.drawCircle(mCenterX, mCenterX + 82, 24, mHourNumberPaint);
         }
 
