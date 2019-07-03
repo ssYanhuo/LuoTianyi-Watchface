@@ -31,6 +31,8 @@ import java.lang.ref.WeakReference;
 import java.nio.channels.GatheringByteChannel;
 import java.util.Calendar;
 import java.util.TimeZone;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import static android.support.wearable.watchface.WatchFaceStyle.PROTECT_STATUS_BAR;
@@ -129,6 +131,8 @@ public class MyWatchFace extends CanvasWatchFaceService {
         private boolean mAmbient;
         private boolean mLowBitAmbient;
         private boolean mBurnInProtection;
+        private int touchCount;
+        private boolean timerRunning;
 
         @Override
         public void onCreate(SurfaceHolder holder) {
@@ -140,7 +144,7 @@ public class MyWatchFace extends CanvasWatchFaceService {
                     .build());
 
             mCalendar = Calendar.getInstance();
-
+            touchCount = 0;
             initializeBackground();
             initializeWatchFace();
         }
@@ -377,6 +381,25 @@ public class MyWatchFace extends CanvasWatchFaceService {
                 case TAP_TYPE_TAP:
                     // The user has completed the tap gesture.
                     // TODO: Add code to handle the tap gesture.
+                    touchCount++;
+                    if (!timerRunning){
+                        timerRunning = true;
+                        Timer timer = new Timer();
+                        TimerTask timerTask = new TimerTask() {
+                            @Override
+                            public void run() {
+                                touchCount = 0;
+                                timerRunning = false;
+                            }
+                        };
+                        timer.schedule(timerTask, 3000);
+                    }
+                    if(touchCount >= 12){
+                        touchCount = 0;
+                        Intent intent = new Intent();
+                        intent.setClass(getApplicationContext(), EasterActivity.class);
+                        startActivity(intent);
+                    }
             }
             invalidate();
         }

@@ -6,5 +6,11 @@
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.
     -->
-    <string name="hello_world">A watchface based on Vsinger official watch.\n@ssYanhuo</string>
+    <string name="about_text">A watchface based on Vsinger official watch.\n@ssYanhuo</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="title_activity_easter" translatable="false">Easteregg</string>
+    <string name="easter_text" translatable="false">我好像做了一个梦。\n\n梦里的我在天上。\n\n光芒似乎被剥离了，眼前漆黑一片。\n\n我不知所措，希望能做些什么。\n\n风铃的声响划破寂静。\n\n循着声音的方向，我感受到了大家汇聚的思念。\n\n我伸出了双手，像是有了魔力一般。\n\n五颜六色的星星从我指间涌出，点亮了世界。\n\n我想，我触碰到了未来。\n\nBy @BIlibili</string>
 </resources>
