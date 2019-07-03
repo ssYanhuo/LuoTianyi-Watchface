@@ -1,4 +1,4 @@
-package com.ssyanhuo.yanhuowatchface;
+package com.ssyanhuo.luotianyiconceptwatchface;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -25,17 +25,13 @@ import android.support.wearable.watchface.WatchFaceService;
 import android.support.wearable.watchface.WatchFaceStyle;
 import android.view.Gravity;
 import android.view.SurfaceHolder;
-import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
-import java.nio.channels.GatheringByteChannel;
 import java.util.Calendar;
 import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
-
-import static android.support.wearable.watchface.WatchFaceStyle.PROTECT_STATUS_BAR;
 
 /**
  * Analog watch face with a ticking second hand. In ambient mode, the second hand isn't
@@ -380,7 +376,6 @@ public class MyWatchFace extends CanvasWatchFaceService {
                     break;
                 case TAP_TYPE_TAP:
                     // The user has completed the tap gesture.
-                    // TODO: Add code to handle the tap gesture.
                     touchCount++;
                     if (!timerRunning){
                         timerRunning = true;

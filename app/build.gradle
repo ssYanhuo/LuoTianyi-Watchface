@@ -4,12 +4,12 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.0"
     defaultConfig {
-        applicationId "com.ssyanhuo.yanhuowatchface"
+        applicationId "com.ssyanhuo.luotianyiconceptwatchface"
         minSdkVersion 23
         targetSdkVersion 29
         versionCode 2
         versionName "Summer"
-        multiDexEnabled true
+        multiDexEnabled false
     }
     buildTypes {
         release {

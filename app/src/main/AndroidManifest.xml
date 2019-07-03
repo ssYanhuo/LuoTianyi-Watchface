@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ssyanhuo.yanhuowatchface">
+    package="com.ssyanhuo.luotianyiconceptwatchface">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
@@ -27,16 +27,11 @@
             android:value="true" />
 
         <activity
-            android:name=".EasterActivity"
+            android:name="com.ssyanhuo.luotianyiconceptwatchface.EasterActivity"
             android:label="@string/title_activity_easter">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-
         </activity>
         <activity
-            android:name=".ConfigActivity"
+            android:name="com.ssyanhuo.luotianyiconceptwatchface.ConfigActivity"
             android:label="@string/title_activity_config">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -48,7 +43,7 @@
         </activity>
 
         <service
-            android:name=".MyWatchFace"
+            android:name="com.ssyanhuo.luotianyiconceptwatchface.MyWatchFace"
             android:label="@string/my_analog_name"
             android:permission="android.permission.BIND_WALLPAPER">
             <meta-data
