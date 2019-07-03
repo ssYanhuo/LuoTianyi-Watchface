@@ -7,8 +7,8 @@ android {
         applicationId "com.ssyanhuo.yanhuowatchface"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 1.01
-        versionName "1.01-Summer"
+        versionCode 2
+        versionName "Summer"
         multiDexEnabled true
     }
     buildTypes {
@@ -27,6 +27,6 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.palette:palette:1.0.0'
-    implementation 'com.android.support:wear:28.0.0'
+    implementation 'androidx.wear:wear:1.0.0'
     compileOnly 'com.google.android.wearable:wearable:2.4.0'
 }
